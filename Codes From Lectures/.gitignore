@@ -1,0 +1,15 @@
+# Build outputs
+bin/
+obj/
+
+# Visual Studio working files
+.vs/
+
+# User-specific settings
+*.user
+*.suo
+
+# Build artifacts
+*.pdb
+*.cache
+*.log
