@@ -1,0 +1,15 @@
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\bin\Debug\net8.0\StudyRunner.exe
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\bin\Debug\net8.0\StudyRunner.deps.json
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\bin\Debug\net8.0\StudyRunner.runtimeconfig.json
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\bin\Debug\net8.0\StudyRunner.dll
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\bin\Debug\net8.0\StudyRunner.pdb
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.GeneratedMSBuildEditorConfig.editorconfig
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.AssemblyInfoInputs.cache
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.AssemblyInfo.cs
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.csproj.CoreCompileInputs.cache
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.sourcelink.json
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.dll
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\refint\StudyRunner.dll
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.pdb
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\StudyRunner.genruntimeconfig.cache
+D:\5 semester\პროგრამული ინჟინერია\StudyRunner\obj\Debug\net8.0\ref\StudyRunner.dll

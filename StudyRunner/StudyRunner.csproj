@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Session 1 - Singleton design pattern\1. Singleton Design Pattern.cs" />
+    <Compile Include="..\Session 2 - Factory design pattern\1. Factory Design Pattern.cs" />
+    <Compile Include="..\Session 3 - State design pattern\1. State Design Pattern.cs" />
+    <Compile Include="..\Session 4 - Facade design pattern\1. Facade Design Pattern.cs" />
+    <Compile Include="..\Session 5 - Strategy design pattern\1. Strategy Design Pattern.cs" />
+
+    <Compile Include="..\Session 6 - Solid principles\1. Single Responsibility Principle (SRP).cs" />
+    <Compile Include="..\Session 6 - Solid principles\2. Open-closed Principle (OCP).cs" />
+
+    <Compile Include="..\Session 7 - Solid principles\1. Liskov substitution Principle (LSP).cs" />
+    <Compile Include="..\Session 7 - Solid principles\2. Interface Segregation Principle (ISP).cs" />
+    <Compile Include="..\Session 7 - Solid principles\3. Dependency Inversion Principle (DIP).cs" />
+
+    <Compile Include="..\Session 8 - Prototype, Builder, Abstract Factory\1. Prototype Design Pattern.cs" />
+    <Compile Include="..\Session 8 - Prototype, Builder, Abstract Factory\2. Builder Design Pattern.cs" />
+    <Compile Include="..\Session 8 - Prototype, Builder, Abstract Factory\3. Abstract Factory Design Pattern.cs" />
+
+    <Compile Include="..\Session 9 - Chain of Responsibility, Decorator, Adapter\1. Chain of Responsibility Design Pattern.cs" />
+    <Compile Include="..\Session 9 - Chain of Responsibility, Decorator, Adapter\2. Decorator Design Pattern.cs" />
+    <Compile Include="..\Session 9 - Chain of Responsibility, Decorator, Adapter\3. Adapter Design Pattern.cs" />
+
+    <Compile Include="..\Session 10 - Facade, Mediator\1. Facade Design Pattern.cs" />
+    <Compile Include="..\Session 10 - Facade, Mediator\2. Mediator Design Pattern.cs" />
+  </ItemGroup>
+</Project>

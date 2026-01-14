@@ -1,15 +1,79 @@
-# Build outputs
-bin/
-obj/
+# ------------------------------------------------------------
+# .NET / Visual Studio / Rider (workspace-wide)
+# Ignores build outputs, IDE caches, user files, and artifacts
+# ------------------------------------------------------------
 
-# Visual Studio working files
+# Build outputs (all projects)
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache/options
 .vs/
-
-# User-specific settings
-*.user
 *.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.VC.db
+*.VC.VC.opendb
 
-# Build artifacts
-*.pdb
-*.cache
+# Visual Studio Code (optional; comment out if you want to commit settings)
+.vscode/
+
+# MSBuild / publish artifacts
+*.tlog
+*.lastbuildstate
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# NuGet (packages.config-era)
+packages/
+**/packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+
+# Common build/test output folders
+**/artifacts/
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Debug/Release folders (some project types output directly here)
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+
+# Rider / IntelliJ
+.idea/
+*.sln.iml
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# OS / tooling junk
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.orig
 *.log
+
+# Debug symbols and intermediate artifacts
+*.pdb
+*.ipdb
+*.iobj
+*.cache
+*.pidb
+*.svclog
