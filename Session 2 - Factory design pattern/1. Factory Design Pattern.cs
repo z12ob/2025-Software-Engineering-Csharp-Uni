@@ -1,78 +1,64 @@
-#nullable enable
-
 using System;
 
 namespace Session2_Factory;
 
-/*
-FACTORY (Creational)
+// Factory Design Pattern
+// - Factory returns objects using an interface.
+// - Client does not know the concrete class.
 
-There are many "factory" variants. This file demonstrates a simple Factory Method style.
-
-Intent
-- Encapsulate object creation.
-- Return an abstraction (interface/base class), not a concrete implementation.
-
-Benefits
-- Callers don't depend on concrete classes.
-- Central place to enforce creation rules.
-
-Tradeoff
-- Adds an extra indirection (the factory) and more types.
-*/
-
-public enum NotificationType
+public interface IProduct
 {
-	Email,
-	Sms,
-	Push
+	void GetData();
 }
 
-public interface INotification
+public class Apple : IProduct
 {
-	void Send(string to, string message);
-}
-
-public sealed class EmailNotification : INotification
-{
-	public void Send(string to, string message) =>
-		Console.WriteLine($"[EMAIL] To={to} Body='{message}'");
-}
-
-public sealed class SmsNotification : INotification
-{
-	public void Send(string to, string message) =>
-		Console.WriteLine($"[SMS] To={to} Body='{message}'");
-}
-
-public sealed class PushNotification : INotification
-{
-	public void Send(string to, string message) =>
-		Console.WriteLine($"[PUSH] To={to} Body='{message}'");
-}
-
-public static class NotificationFactory
-{
-	public static INotification Create(NotificationType type) => type switch
+	public void GetData()
 	{
-		NotificationType.Email => new EmailNotification(),
-		NotificationType.Sms => new SmsNotification(),
-		NotificationType.Push => new PushNotification(),
-		_ => throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown notification type")
-	};
+		Console.WriteLine("I am Apple");
+	}
+}
+
+public class Micro : IProduct
+{
+	public void GetData()
+	{
+		Console.WriteLine("I am Microsoft");
+	}
+}
+
+public class Google : IProduct
+{
+	public void GetData()
+	{
+		Console.WriteLine("I am Google");
+	}
+}
+
+public class ProductFactory
+{
+	public IProduct GetProduct(int i)
+	{
+		if (i == 1)
+			return new Apple();
+		else if (i == 2)
+			return new Micro();
+		else
+			return new Google();
+	}
 }
 
 public static class FactoryDemo
 {
-	// How to run:
-	// - In a Console app, call: Session2_Factory.FactoryDemo.Run();
 	public static void Run()
 	{
-		INotification notifier = NotificationFactory.Create(NotificationType.Email);
-		notifier.Send("student@example.com", "Exam starts at 10:00.");
+		ProductFactory factory = new ProductFactory();
 
-		notifier = NotificationFactory.Create(NotificationType.Sms);
-		notifier.Send("+995-xxx-xxx", "Don’t forget your ID card.");
+		IProduct p1 = factory.GetProduct(1);
+		p1.GetData();
+
+		IProduct p2 = factory.GetProduct(2);
+		p2.GetData();
 	}
 }
 

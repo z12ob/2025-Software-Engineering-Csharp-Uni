@@ -1,118 +1,76 @@
-#nullable enable
+#nullable disable
 
 using System;
 using System.Collections.Generic;
 
 namespace Session10_Mediator;
 
-/*
-MEDIATOR (Behavioral)
+// MEDIATOR (simple lecture style)
+// Users talk through ChatRoom, not directly.
 
-Intent
-- Define an object (Mediator) that encapsulates how a set of objects interact.
-- Promotes loose coupling by preventing objects from referring to each other explicitly.
-
-Benefit
-- Instead of many-to-many connections between colleagues, you have:
-  Colleague -> Mediator -> Colleague(s)
-
-Example: Chat room.
-- Users don't call each other directly.
-- They send messages through the ChatRoom mediator.
-*/
-
-public interface IChatRoom
+public class ChatRoom
 {
-	void Register(User user);
-	void Send(string from, string to, string message);
-	void Broadcast(string from, string message);
-}
-
-public sealed class ChatRoom : IChatRoom
-{
-	private readonly Dictionary<string, User> _users = new(StringComparer.OrdinalIgnoreCase);
+	private List<User> users = new List<User>();
 
 	public void Register(User user)
 	{
-		_users[user.Name] = user;
-		user.SetChatRoom(this);
+		users.Add(user);
+		user.SetRoom(this);
 	}
 
 	public void Send(string from, string to, string message)
 	{
-		if (_users.TryGetValue(to, out var receiver))
+		for (int i = 0; i < users.Count; i++)
 		{
-			receiver.Receive(from, message);
+			if (users[i].Name == to)
+			{
+				users[i].Receive(from, message);
+				return;
+			}
 		}
-		else
-		{
-			Console.WriteLine($"[ChatRoom] User '{to}' not found.");
-		}
-	}
-
-	public void Broadcast(string from, string message)
-	{
-		foreach (var kv in _users)
-		{
-			// Optional: don't send broadcast to sender.
-			if (string.Equals(kv.Key, from, StringComparison.OrdinalIgnoreCase))
-				continue;
-
-			kv.Value.Receive(from, message);
-		}
+		Console.WriteLine("User not found: " + to);
 	}
 }
 
-public sealed class User
+public class User
 {
-	private IChatRoom? _chatRoom;
+	private ChatRoom room;
+	public string Name;
 
 	public User(string name)
 	{
 		Name = name;
 	}
 
-	public string Name { get; }
-
-	internal void SetChatRoom(IChatRoom chatRoom) => _chatRoom = chatRoom;
-
-	public void SendTo(string to, string message)
+	public void SetRoom(ChatRoom room)
 	{
-		if (_chatRoom is null) throw new InvalidOperationException("User is not registered in a chat room.");
-		_chatRoom.Send(Name, to, message);
+		this.room = room;
 	}
 
-	public void Broadcast(string message)
+	public void Send(string to, string message)
 	{
-		if (_chatRoom is null) throw new InvalidOperationException("User is not registered in a chat room.");
-		_chatRoom.Broadcast(Name, message);
+		room.Send(Name, to, message);
 	}
 
 	public void Receive(string from, string message)
 	{
-		Console.WriteLine($"[{Name}] received from {from}: {message}");
+		Console.WriteLine(Name + " received from " + from + ": " + message);
 	}
 }
 
 public static class MediatorDemo
 {
-	// How to run:
-	// - In a Console app, call: Session10_Mediator.MediatorDemo.Run();
 	public static void Run()
 	{
-		var room = new ChatRoom();
+		ChatRoom room = new ChatRoom();
+		User a = new User("Ana");
+		User b = new User("Gio");
 
-		var ana = new User("Ana");
-		var gio = new User("Gio");
-		var mari = new User("Mari");
+		room.Register(a);
+		room.Register(b);
 
-		room.Register(ana);
-		room.Register(gio);
-		room.Register(mari);
-
-		ana.SendTo("Gio", "Hi! Are you ready for the exam?");
-		gio.SendTo("Ana", "Almost. Reviewing patterns now.");
-		mari.Broadcast("Good luck everyone!");
+		a.Send("Gio", "Hello");
+		b.Send("Ana", "Hi");
 	}
 }
 

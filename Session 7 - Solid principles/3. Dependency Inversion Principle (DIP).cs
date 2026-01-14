@@ -1,82 +1,56 @@
-#nullable enable
+#nullable disable
 
 using System;
 
 namespace Session7_SOLID_DIP;
 
-/*
-DIP — Dependency Inversion Principle
+// DIP: high-level code depends on abstraction (interface), not concrete classes.
 
-Definition
-- High-level modules should not depend on low-level modules.
-  Both should depend on abstractions.
-- Abstractions should not depend on details.
-  Details should depend on abstractions.
-
-Practical meaning
-- Write code against interfaces.
-- Inject dependencies (constructor injection).
-- This improves testability and flexibility.
-*/
-
-public interface IPaymentGateway
+public interface IMessageSender
 {
-	void Charge(decimal amount);
+	void Send(string message);
 }
 
-// Low-level detail #1
-public sealed class StripeGateway : IPaymentGateway
+public class EmailSender : IMessageSender
 {
-	public void Charge(decimal amount) => Console.WriteLine($"Stripe charged {amount:C}");
-}
-
-// Low-level detail #2
-public sealed class FakeGatewayForTests : IPaymentGateway
-{
-	public decimal TotalCharged { get; private set; }
-	public void Charge(decimal amount)
+	public void Send(string message)
 	{
-		TotalCharged += amount;
-		Console.WriteLine($"FAKE gateway charged {amount:C}");
+		Console.WriteLine("Email: " + message);
 	}
 }
 
-// High-level module: business workflow
-public sealed class OrderService
+public class SmsSender : IMessageSender
 {
-	private readonly IPaymentGateway _gateway;
-
-	public OrderService(IPaymentGateway gateway)
+	public void Send(string message)
 	{
-		_gateway = gateway;
+		Console.WriteLine("SMS: " + message);
+	}
+}
+
+public class Notification
+{
+	private IMessageSender sender;
+
+	public Notification(IMessageSender sender)
+	{
+		this.sender = sender;
 	}
 
-	public void PlaceOrder(decimal total)
+	public void Notify(string message)
 	{
-		if (total <= 0) throw new ArgumentOutOfRangeException(nameof(total));
-
-		// Business policy would live here (discounts, fraud checks, etc.)
-		_gateway.Charge(total);
-
-		Console.WriteLine("Order placed successfully.");
+		sender.Send(message);
 	}
 }
 
 public static class DipDemo
 {
-	// How to run:
-	// - In a Console app, call: Session7_SOLID_DIP.DipDemo.Run();
 	public static void Run()
 	{
-		var prodService = new OrderService(new StripeGateway());
-		prodService.PlaceOrder(120);
+		Notification n1 = new Notification(new EmailSender());
+		n1.Notify("Hello from DIP");
 
-		var fake = new FakeGatewayForTests();
-		var testService = new OrderService(fake);
-		testService.PlaceOrder(10);
-		testService.PlaceOrder(5);
-
-		Console.WriteLine($"Fake total charged: {fake.TotalCharged:C}");
+		Notification n2 = new Notification(new SmsSender());
+		n2.Notify("Same Notification, different sender");
 	}
 }
 

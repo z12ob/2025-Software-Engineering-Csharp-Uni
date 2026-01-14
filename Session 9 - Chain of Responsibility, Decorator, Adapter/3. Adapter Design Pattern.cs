@@ -1,63 +1,46 @@
-#nullable enable
+#nullable disable
 
 using System;
 
 namespace Session9_Adapter;
 
-/*
-ADAPTER (Structural)
+// ADAPTER (simple lecture style)
+// Convert one interface to another.
 
-Intent
-- Convert the interface of a class into another interface clients expect.
-- Lets classes work together that couldn’t otherwise due to incompatible interfaces.
-
-Example
-- Your code expects IPaymentProcessor.Process(decimal amount).
-- A legacy SDK provides LegacyPaymentSdk.PayInCents(int cents).
-Adapter translates between them.
-*/
-
-// The interface our application wants to use.
-public interface IPaymentProcessor
+public interface ITarget
 {
-	void Process(decimal amount);
+	void Request();
 }
 
-// Legacy / third-party class we cannot change.
-public sealed class LegacyPaymentSdk
+public class Adaptee
 {
-	public void PayInCents(int cents)
+	public void SpecificRequest()
 	{
-		Console.WriteLine($"Legacy SDK paid {cents} cents");
+		Console.WriteLine("Adaptee: SpecificRequest");
 	}
 }
 
-// Adapter: makes LegacyPaymentSdk look like IPaymentProcessor.
-public sealed class LegacyPaymentAdapter : IPaymentProcessor
+public class Adapter : ITarget
 {
-	private readonly LegacyPaymentSdk _legacy;
+	private Adaptee adaptee;
 
-	public LegacyPaymentAdapter(LegacyPaymentSdk legacy)
+	public Adapter(Adaptee adaptee)
 	{
-		_legacy = legacy;
+		this.adaptee = adaptee;
 	}
 
-	public void Process(decimal amount)
+	public void Request()
 	{
-		// Convert dollars/gel/etc. to cents.
-		var cents = (int)Math.Round(amount * 100m, MidpointRounding.AwayFromZero);
-		_legacy.PayInCents(cents);
+		adaptee.SpecificRequest();
 	}
 }
 
 public static class AdapterDemo
 {
-	// How to run:
-	// - In a Console app, call: Session9_Adapter.AdapterDemo.Run();
 	public static void Run()
 	{
-		IPaymentProcessor processor = new LegacyPaymentAdapter(new LegacyPaymentSdk());
-		processor.Process(12.34m);
+		ITarget target = new Adapter(new Adaptee());
+		target.Request();
 	}
 }
 

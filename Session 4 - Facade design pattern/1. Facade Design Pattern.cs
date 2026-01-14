@@ -1,53 +1,52 @@
-#nullable enable
+#nullable disable
 
 using System;
 
 namespace Session4_Facade;
 
-/*
-FACADE (Structural)
+// FACADE pattern (simple lecture style)
+// Facade provides one simple operation for many subsystem calls.
 
-Intent
-- Provide a simplified interface to a complex subsystem.
-
-Benefits
-- Reduces dependencies on the subsystem.
-- Makes the subsystem easier to use.
-
-Typical uses
-- When a system is complex and requires multiple classes to work together.
-*/
-
-public class SubsystemA
+public class Subsystem1
 {
-	public void OperationA() => Console.WriteLine("Subsystem A, Operation A");
-}
-
-public class SubsystemB
-{
-	public void OperationB() => Console.WriteLine("Subsystem B, Operation B");
-}
-
-public class Facade
-{
-	private readonly SubsystemA _subsystemA = new();
-	private readonly SubsystemB _subsystemB = new();
-
-	public void Operation() 
+	public void Method1()
 	{
-		Console.WriteLine("Facade initializes subsystems:");
-		_subsystemA.OperationA();
-		_subsystemB.OperationB();
+		Console.WriteLine("Subsystem1: Method1");
+	}
+}
+
+public class Subsystem2
+{
+	public void Method2()
+	{
+		Console.WriteLine("Subsystem2: Method2");
+	}
+}
+
+public class SimpleFacade
+{
+	private Subsystem1 s1;
+	private Subsystem2 s2;
+
+	public SimpleFacade()
+	{
+		s1 = new Subsystem1();
+		s2 = new Subsystem2();
+	}
+
+	public void Operation()
+	{
+		Console.WriteLine("Facade: Operation");
+		s1.Method1();
+		s2.Method2();
 	}
 }
 
 public static class FacadeDemo
 {
-	// How to run:
-	// - In a Console app, call: Session4_Facade.FacadeDemo.Run();
 	public static void Run()
 	{
-		var facade = new Facade();
+		SimpleFacade facade = new SimpleFacade();
 		facade.Operation();
 	}
 }

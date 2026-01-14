@@ -1,116 +1,63 @@
-#nullable enable
+#nullable disable
 
 using System;
 
 namespace Session3_State;
 
-/*
-STATE (Behavioral)
+// STATE pattern (simple lecture style)
+// TV changes behavior based on its current state (ON/OFF).
 
-Intent
-- Let an object change its behavior when its internal state changes.
-- Replace large if/switch blocks with polymorphism.
-
-Key idea
-- Context delegates to a State object.
-- State object can transition the Context to another State.
-*/
-
-public sealed class Order
+public interface ITVState
 {
-	private IOrderState _state = new NewOrderState();
-
-	internal void SetState(IOrderState newState) => _state = newState;
-
-	public string StateName => _state.Name;
-
-	public void Pay() => _state.Pay(this);
-	public void Ship() => _state.Ship(this);
-	public void Cancel() => _state.Cancel(this);
+	void PressPower(TV tv);
 }
 
-public interface IOrderState
+public class TV
 {
-	string Name { get; }
-	void Pay(Order order);
-	void Ship(Order order);
-	void Cancel(Order order);
-}
+	private ITVState state;
 
-public sealed class NewOrderState : IOrderState
-{
-	public string Name => "New";
-
-	public void Pay(Order order)
+	public TV()
 	{
-		Console.WriteLine("Payment accepted.");
-		order.SetState(new PaidOrderState());
+		state = new TvOffState();
 	}
 
-	public void Ship(Order order) =>
-		Console.WriteLine("Cannot ship: order is not paid.");
-
-	public void Cancel(Order order)
+	public void SetState(ITVState newState)
 	{
-		Console.WriteLine("Order canceled.");
-		order.SetState(new CanceledOrderState());
+		state = newState;
+	}
+
+	public void PressPower()
+	{
+		state.PressPower(this);
 	}
 }
 
-public sealed class PaidOrderState : IOrderState
+public class TvOnState : ITVState
 {
-	public string Name => "Paid";
-
-	public void Pay(Order order) => Console.WriteLine("Already paid.");
-
-	public void Ship(Order order)
+	public void PressPower(TV tv)
 	{
-		Console.WriteLine("Order shipped.");
-		order.SetState(new ShippedOrderState());
-	}
-
-	public void Cancel(Order order)
-	{
-		Console.WriteLine("Refund issued, order canceled.");
-		order.SetState(new CanceledOrderState());
+		Console.WriteLine("TV is ON -> turning OFF");
+		tv.SetState(new TvOffState());
 	}
 }
 
-public sealed class ShippedOrderState : IOrderState
+public class TvOffState : ITVState
 {
-	public string Name => "Shipped";
-
-	public void Pay(Order order) => Console.WriteLine("Already paid and shipped.");
-	public void Ship(Order order) => Console.WriteLine("Already shipped.");
-	public void Cancel(Order order) => Console.WriteLine("Cannot cancel: already shipped.");
-}
-
-public sealed class CanceledOrderState : IOrderState
-{
-	public string Name => "Canceled";
-
-	public void Pay(Order order) => Console.WriteLine("Cannot pay: order is canceled.");
-	public void Ship(Order order) => Console.WriteLine("Cannot ship: order is canceled.");
-	public void Cancel(Order order) => Console.WriteLine("Already canceled.");
+	public void PressPower(TV tv)
+	{
+		Console.WriteLine("TV is OFF -> turning ON");
+		tv.SetState(new TvOnState());
+	}
 }
 
 public static class StateDemo
 {
-	// How to run:
-	// - In a Console app, call: Session3_State.StateDemo.Run();
 	public static void Run()
 	{
-		var order = new Order();
-		Console.WriteLine($"State: {order.StateName}");
-
-		order.Ship();
-		order.Pay();
-		Console.WriteLine($"State: {order.StateName}");
-
-		order.Ship();
-		Console.WriteLine($"State: {order.StateName}");
-
-		order.Cancel();
+		TV tv = new TV();
+		tv.PressPower();
+		tv.PressPower();
+		tv.PressPower();
 	}
 }
 

@@ -1,6 +1,25 @@
 # ------------------------------------------------------------
-# .NET / Visual Studio / Rider (workspace-wide)
-# Ignores build outputs, IDE caches, user files, and artifacts
+# Allow-list mode (keep only what you want in git)
+# Tracks only: .cs, .pdf, .webp (+ this .gitignore file)
+# ------------------------------------------------------------
+
+# Ignore everything by default
+*
+
+# But don't ignore directories (so we can unignore files inside them)
+!*/
+
+# Keep these file types
+!*.cs
+!*.pdf
+!*.webp
+
+# Keep git ignore/config files
+!.gitignore
+
+# ------------------------------------------------------------
+# Extra safety ignores (mostly redundant under allow-list mode)
+# .NET / Visual Studio / Rider caches and build artifacts
 # ------------------------------------------------------------
 
 # Build outputs (all projects)

@@ -1,104 +1,69 @@
-#nullable enable
+#nullable disable
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Session8_Builder;
 
-/*
-BUILDER (Creational)
+// BUILDER pattern (simple lecture style)
+// Build an object step-by-step.
 
-Intent
-- Separate the construction of a complex object from its representation.
-
-When to use
-- You have many optional parameters / combinations.
-- You want readable object construction (instead of huge constructors).
-
-This example builds a Pizza with optional parts.
-*/
-
-public sealed class Pizza
+public class House
 {
-	public required string Size { get; init; }
-	public required string Dough { get; init; }
-	public required string Sauce { get; init; }
-	public IReadOnlyList<string> Toppings { get; init; } = Array.Empty<string>();
+	public string Walls;
+	public string Roof;
+	public string Door;
 
-	public override string ToString() =>
-		$"Pizza(Size={Size}, Dough={Dough}, Sauce={Sauce}, Toppings=[{string.Join(", ", Toppings)}])";
+	public void Show()
+	{
+		Console.WriteLine("House: " + Walls + ", " + Roof + ", " + Door);
+	}
 }
 
-public sealed class PizzaBuilder
+public class HouseBuilder
 {
-	private string? _size;
-	private string _dough = "Regular";
-	private string _sauce = "Tomato";
-	private readonly List<string> _toppings = new();
+	private House house;
 
-	public PizzaBuilder Size(string size)
+	public HouseBuilder()
 	{
-		_size = size;
+		house = new House();
+	}
+
+	public HouseBuilder BuildWalls(string walls)
+	{
+		house.Walls = walls;
 		return this;
 	}
 
-	public PizzaBuilder Dough(string dough)
+	public HouseBuilder BuildRoof(string roof)
 	{
-		_dough = dough;
+		house.Roof = roof;
 		return this;
 	}
 
-	public PizzaBuilder Sauce(string sauce)
+	public HouseBuilder BuildDoor(string door)
 	{
-		_sauce = sauce;
+		house.Door = door;
 		return this;
 	}
 
-	public PizzaBuilder AddTopping(string topping)
+	public House GetHouse()
 	{
-		_toppings.Add(topping);
-		return this;
-	}
-
-	public Pizza Build()
-	{
-		if (string.IsNullOrWhiteSpace(_size))
-			throw new InvalidOperationException("Size must be set before Build().");
-
-		return new Pizza
-		{
-			Size = _size,
-			Dough = _dough,
-			Sauce = _sauce,
-			Toppings = _toppings.ToList()
-		};
+		return house;
 	}
 }
 
 public static class BuilderDemo
 {
-	// How to run:
-	// - In a Console app, call: Session8_Builder.BuilderDemo.Run();
 	public static void Run()
 	{
-		var margherita = new PizzaBuilder()
-			.Size("Medium")
-			.Dough("Thin")
-			.Sauce("Tomato")
-			.AddTopping("Mozzarella")
-			.AddTopping("Basil")
-			.Build();
+		HouseBuilder builder = new HouseBuilder();
+		House house = builder
+			.BuildWalls("Brick walls")
+			.BuildRoof("Red roof")
+			.BuildDoor("Wood door")
+			.GetHouse();
 
-		var meatLovers = new PizzaBuilder()
-			.Size("Large")
-			.AddTopping("Pepperoni")
-			.AddTopping("Sausage")
-			.AddTopping("Bacon")
-			.Build();
-
-		Console.WriteLine(margherita);
-		Console.WriteLine(meatLovers);
+		house.Show();
 	}
 }
 

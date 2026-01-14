@@ -1,88 +1,53 @@
-#nullable enable
+#nullable disable
 
 using System;
-using System.Collections.Generic;
 
 namespace Session8_Prototype;
 
-/*
-PROTOTYPE (Creational)
+// PROTOTYPE pattern (simple lecture style)
+// Create a new object by cloning an existing object.
 
-Intent
-- Create new objects by copying (cloning) existing ones.
-
-Why it’s useful
-- When object creation is expensive.
-- When you want a "template" instance and then create variations quickly.
-
-Important detail: shallow vs deep copy
-- Shallow copy: references inside the object are shared.
-- Deep copy: nested objects are also cloned (no shared references).
-*/
-
-public interface IPrototype<T>
+public class Person
 {
-	T Clone();
-}
+	public string Name;
+	public int Age;
+	public Address Address;
 
-public sealed class Document : IPrototype<Document>
-{
-	public required string Title { get; set; }
-
-	// Nested reference-type data.
-	public List<Page> Pages { get; } = new();
-
-	// Deep clone implementation.
-	public Document Clone()
+	public Person(string name, int age, Address address)
 	{
-		var copy = new Document { Title = Title };
-		foreach (var page in Pages)
-		{
-			copy.Pages.Add(page.Clone());
-		}
+		Name = name;
+		Age = age;
+		Address = address;
+	}
 
-		return copy;
+	public Person Clone()
+	{
+		Address newAddress = new Address(Address.City);
+		return new Person(Name, Age, newAddress);
 	}
 }
 
-public sealed class Page : IPrototype<Page>
+public class Address
 {
-	public required string Text { get; set; }
+	public string City;
 
-	public Page Clone()
+	public Address(string city)
 	{
-		// Strings are immutable, so copying the reference is safe.
-		return new Page { Text = Text };
+		City = city;
 	}
 }
 
 public static class PrototypeDemo
 {
-	// How to run:
-	// - In a Console app, call: Session8_Prototype.PrototypeDemo.Run();
 	public static void Run()
 	{
-		var template = new Document { Title = "Exam Template" };
-		template.Pages.Add(new Page { Text = "Page 1: Introduction" });
-		template.Pages.Add(new Page { Text = "Page 2: Questions" });
+		Person p1 = new Person("Ana", 20, new Address("Tbilisi"));
+		Person p2 = p1.Clone();
+		p2.Name = "Gio";
+		p2.Address.City = "Kutaisi";
 
-		var versionA = template.Clone();
-		versionA.Title = "Exam A";
-		versionA.Pages[1].Text = "Page 2: Questions (Variant A)";
-
-		var versionB = template.Clone();
-		versionB.Title = "Exam B";
-
-		Console.WriteLine($"Template Title: {template.Title}");
-		Console.WriteLine($"Template Page2: {template.Pages[1].Text}");
-		Console.WriteLine();
-
-		Console.WriteLine($"VersionA Title: {versionA.Title}");
-		Console.WriteLine($"VersionA Page2: {versionA.Pages[1].Text}");
-		Console.WriteLine();
-
-		Console.WriteLine($"VersionB Title: {versionB.Title}");
-		Console.WriteLine($"VersionB Page2: {versionB.Pages[1].Text}");
+		Console.WriteLine("Original: " + p1.Name + ", " + p1.Address.City);
+		Console.WriteLine("Clone   : " + p2.Name + ", " + p2.Address.City);
 	}
 }
 

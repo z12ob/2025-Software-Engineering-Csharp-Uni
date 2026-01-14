@@ -1,95 +1,90 @@
-#nullable enable
+#nullable disable
 
 using System;
 using System.Collections.Generic;
 
 namespace Session6_SOLID_OCP;
 
-/*
-OCP — Open/Closed Principle
-
-Definition
-- "Software entities should be open for extension, but closed for modification."
-
-Meaning in practice
-- You should be able to add new behavior (new feature) without editing tested, stable code.
-- You usually achieve this with interfaces + polymorphism (or composition).
-
-This example uses Shapes:
-- Bad approach: switch(type) to compute area.
-- OCP approach: each shape knows how to compute its own area.
-*/
+// OCP: add new classes (extension) without changing old code.
 
 public interface IShape
 {
 	double Area();
 }
 
-public sealed class Circle : IShape
+public class Circle : IShape
 {
-	public Circle(double radius) => Radius = radius;
-	public double Radius { get; }
-	public double Area() => Math.PI * Radius * Radius;
+	public double Radius;
+
+	public Circle(double radius)
+	{
+		Radius = radius;
+	}
+
+	public double Area()
+	{
+		return Math.PI * Radius * Radius;
+	}
 }
 
-public sealed class Rectangle : IShape
+public class Rectangle : IShape
 {
+	public double Width;
+	public double Height;
+
 	public Rectangle(double width, double height)
 	{
 		Width = width;
 		Height = height;
 	}
 
-	public double Width { get; }
-	public double Height { get; }
-
-	public double Area() => Width * Height;
+	public double Area()
+	{
+		return Width * Height;
+	}
 }
 
-// NEW FEATURE (extension): adding Triangle does not require modifying the calculator.
-public sealed class Triangle : IShape
+public class Triangle : IShape
 {
+	public double BaseLength;
+	public double Height;
+
 	public Triangle(double baseLength, double height)
 	{
 		BaseLength = baseLength;
 		Height = height;
 	}
 
-	public double BaseLength { get; }
-	public double Height { get; }
-
-	public double Area() => (BaseLength * Height) / 2.0;
+	public double Area()
+	{
+		return (BaseLength * Height) / 2;
+	}
 }
 
-public static class AreaCalculator
+public class AreaCalculator
 {
-	// Note: no switch, no "if (shape is Circle)", etc.
-	public static double TotalArea(IEnumerable<IShape> shapes)
+	public double TotalArea(List<IShape> shapes)
 	{
-		double total = 0;
-		foreach (var s in shapes)
+		double sum = 0;
+		for (int i = 0; i < shapes.Count; i++)
 		{
-			total += s.Area();
+			sum += shapes[i].Area();
 		}
-
-		return total;
+		return sum;
 	}
 }
 
 public static class OcpDemo
 {
-	// How to run:
-	// - In a Console app, call: Session6_SOLID_OCP.OcpDemo.Run();
 	public static void Run()
 	{
-		var shapes = new List<IShape>
-		{
-			new Circle(2),
-			new Rectangle(3, 4),
-			new Triangle(10, 2)
-		};
+		List<IShape> shapes = new List<IShape>();
+		shapes.Add(new Circle(2));
+		shapes.Add(new Rectangle(3, 4));
+		shapes.Add(new Triangle(10, 2));
 
-		Console.WriteLine($"Total area: {AreaCalculator.TotalArea(shapes):0.00}");
+		AreaCalculator calculator = new AreaCalculator();
+		Console.WriteLine("Total area: " + calculator.TotalArea(shapes));
 	}
 }
 

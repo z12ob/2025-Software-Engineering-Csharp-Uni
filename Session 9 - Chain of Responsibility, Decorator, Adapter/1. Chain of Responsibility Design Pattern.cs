@@ -1,105 +1,76 @@
-#nullable enable
+#nullable disable
 
 using System;
 
 namespace Session9_ChainOfResponsibility;
 
-/*
-CHAIN OF RESPONSIBILITY (Behavioral)
+// CHAIN OF RESPONSIBILITY (simple lecture style)
+// Pass request through handlers until someone handles it.
 
-Intent
-- Pass a request along a chain of handlers.
-- Each handler decides to either handle the request or pass it to the next.
-
-Benefits
-- Decouples sender from receivers.
-- Easy to add/reorder handlers.
-
-Example: support tickets are routed by category.
-*/
-
-public enum TicketCategory
+public abstract class Handler
 {
-	Billing,
-	Technical,
-	General
-}
+	protected Handler next;
 
-public sealed class SupportTicket
-{
-	public required TicketCategory Category { get; init; }
-	public required string Message { get; init; }
-}
-
-public abstract class TicketHandler
-{
-	private TicketHandler? _next;
-
-	public TicketHandler SetNext(TicketHandler next)
+	public void SetNext(Handler next)
 	{
-		_next = next;
-		return next;
+		this.next = next;
 	}
 
-	public void Handle(SupportTicket ticket)
+	public abstract void Handle(int amount);
+}
+
+public class HundredsHandler : Handler
+{
+	public override void Handle(int amount)
 	{
-		if (!TryHandle(ticket) && _next is not null)
+		if (amount >= 100)
 		{
-			_next.Handle(ticket);
+			Console.WriteLine("Hundreds handler: " + amount);
+		}
+		else if (next != null)
+		{
+			next.Handle(amount);
 		}
 	}
-
-	// Return true if handled, false if should pass to next.
-	protected abstract bool TryHandle(SupportTicket ticket);
 }
 
-public sealed class BillingHandler : TicketHandler
+public class FiftiesHandler : Handler
 {
-	protected override bool TryHandle(SupportTicket ticket)
+	public override void Handle(int amount)
 	{
-		if (ticket.Category != TicketCategory.Billing) return false;
-
-		Console.WriteLine($"[Billing] Handled: {ticket.Message}");
-		return true;
+		if (amount >= 50)
+		{
+			Console.WriteLine("Fifties handler: " + amount);
+		}
+		else if (next != null)
+		{
+			next.Handle(amount);
+		}
 	}
 }
 
-public sealed class TechnicalHandler : TicketHandler
+public class TensHandler : Handler
 {
-	protected override bool TryHandle(SupportTicket ticket)
+	public override void Handle(int amount)
 	{
-		if (ticket.Category != TicketCategory.Technical) return false;
-
-		Console.WriteLine($"[Tech] Handled: {ticket.Message}");
-		return true;
-	}
-}
-
-public sealed class FallbackHandler : TicketHandler
-{
-	protected override bool TryHandle(SupportTicket ticket)
-	{
-		Console.WriteLine($"[General] Handled: {ticket.Message}");
-		return true;
+		Console.WriteLine("Tens handler (default): " + amount);
 	}
 }
 
 public static class ChainDemo
 {
-	// How to run:
-	// - In a Console app, call: Session9_ChainOfResponsibility.ChainDemo.Run();
 	public static void Run()
 	{
-		// Build the chain.
-		var billing = new BillingHandler();
-		var tech = new TechnicalHandler();
-		var fallback = new FallbackHandler();
+		Handler h1 = new HundredsHandler();
+		Handler h2 = new FiftiesHandler();
+		Handler h3 = new TensHandler();
 
-		billing.SetNext(tech).SetNext(fallback);
+		h1.SetNext(h2);
+		h2.SetNext(h3);
 
-		billing.Handle(new SupportTicket { Category = TicketCategory.Technical, Message = "App crashes on startup" });
-		billing.Handle(new SupportTicket { Category = TicketCategory.Billing, Message = "Refund request" });
-		billing.Handle(new SupportTicket { Category = TicketCategory.General, Message = "How do I change my password?" });
+		h1.Handle(120);
+		h1.Handle(70);
+		h1.Handle(20);
 	}
 }
 

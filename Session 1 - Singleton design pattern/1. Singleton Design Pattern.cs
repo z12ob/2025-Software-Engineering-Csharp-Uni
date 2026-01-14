@@ -1,53 +1,44 @@
-#nullable enable
-
 using System;
 
 namespace Session1_Singleton;
 
-/*
-SINGLETON (Creational)
+// Singleton Design Pattern
+// - Only one object is created.
+// - Private constructor + public GetInstance().
+// Note: simplest version for studying (not thread-safe).
 
-Intent
-- Ensure a class has exactly one instance.
-- Provide a global access point to that instance.
-
-Typical uses
-- Process-wide configuration, shared cache, shared logger bridge.
-
-Warnings
-- Singleton is global state. It can hide dependencies and make testing harder.
-- Prefer Dependency Injection for most services.
-
-This example uses Lazy<T> (simple + thread-safe).
-*/
-
-public sealed class AppConfig
+public class Singleton
 {
-	// Thread-safe lazy initialization.
-	private static readonly Lazy<AppConfig> _instance = new(() => new AppConfig());
+	private static Singleton instance;
 
-	public static AppConfig Instance => _instance.Value;
+	private Singleton() { }
 
-	// Private constructor prevents external instantiation.
-	private AppConfig() { }
+	public static Singleton GetInstance()
+	{
+		if (instance == null)
+		{
+			instance = new Singleton();
+		}
+		return instance;
+	}
 
-	public string ApiBaseUrl { get; set; } = "https://api.example.com";
-	public int TimeoutSeconds { get; set; } = 10;
+	public void DoSomething()
+	{
+		Console.WriteLine("Singleton works!");
+	}
 }
 
 public static class SingletonDemo
 {
-	// How to run:
-	// - In a Console app, call: Session1_Singleton.SingletonDemo.Run();
+	// Usage:
+	// Singleton obj = Singleton.GetInstance();
 	public static void Run()
 	{
-		var a = AppConfig.Instance;
-		var b = AppConfig.Instance;
+		Singleton s1 = Singleton.GetInstance();
+		Singleton s2 = Singleton.GetInstance();
 
-		Console.WriteLine($"Same instance? {ReferenceEquals(a, b)}");
-
-		a.TimeoutSeconds = 30;
-		Console.WriteLine($"b.TimeoutSeconds (should be 30): {b.TimeoutSeconds}");
+		Console.WriteLine("Same object? " + Object.ReferenceEquals(s1, s2));
+		s1.DoSomething();
 	}
 }
 
