@@ -1,52 +1,46 @@
-#nullable disable
-
-using System;
-
-namespace Session7_SOLID_ISP;
-
-// ISP: don't force a class to implement methods it doesn't need.
-
-public interface IPrinter
+// Split interfaces to avoid forcing unnecessary methods
+interface IPrinter
 {
-	void Print();
+    void Print();
 }
 
-public interface IScanner
+interface IScanner
 {
-	void Scan();
+    void Scan();
 }
 
-public class SimplePrinter : IPrinter
+// Implements only what it needs
+class SimplePrinter : IPrinter
 {
-	public void Print()
-	{
-		Console.WriteLine("Printing...");
-	}
+    public void Print()
+    {
+        Console.WriteLine("Printing...");
+    }
 }
 
-public class AllInOne : IPrinter, IScanner
+// Implements multiple interfaces if needed
+class AllInOne : IPrinter, IScanner
 {
-	public void Print()
-	{
-		Console.WriteLine("Printing...");
-	}
+    public void Print()
+    {
+        Console.WriteLine("Printing...");
+    }
 
-	public void Scan()
-	{
-		Console.WriteLine("Scanning...");
-	}
+    public void Scan()
+    {
+        Console.WriteLine("Scanning...");
+    }
 }
 
-public static class IspDemo
+class Program
 {
-	public static void Run()
-	{
-		IPrinter printer = new SimplePrinter();
-		printer.Print();
+    static void Main()
+    {
+        IPrinter p = new SimplePrinter();
+        p.Print(); // Only printing behavior
 
-		AllInOne a = new AllInOne();
-		a.Print();
-		a.Scan();
-	}
+        AllInOne a = new AllInOne();
+        a.Print();
+        a.Scan(); // Both behaviors
+    }
 }
-

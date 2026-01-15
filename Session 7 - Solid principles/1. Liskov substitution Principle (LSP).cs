@@ -1,52 +1,46 @@
-#nullable disable
-
-using System;
-
-namespace Session7_SOLID_LSP;
-
-// LSP: base type should not force behavior that some subtypes can't do.
-// Not all birds can fly, so "Fly" is a separate interface.
-
-public abstract class Bird
+// Base class has only safe behaviors.
+abstract class Bird
 {
-	public void Eat()
-	{
-		Console.WriteLine("Bird eats");
-	}
+    public void Eat()
+    {
+        Console.WriteLine("Bird eats");
+    }
 }
 
-public interface IFly
+// Separate interface for flying capability.
+interface IFly
 {
-	void Fly();
+    void Fly();
 }
 
-public class Sparrow : Bird, IFly
+// Can fly, implements IFly.
+class Sparrow : Bird, IFly
 {
-	public void Fly()
-	{
-		Console.WriteLine("Sparrow flies");
-	}
+    public void Fly()
+    {
+        Console.WriteLine("Sparrow flies");
+    }
 }
 
-public class Penguin : Bird
+// Cannot fly. Extra behavior is separate.
+class Penguin : Bird
 {
-	public void Swim()
-	{
-		Console.WriteLine("Penguin swims");
-	}
+    public void Swim()
+    {
+        Console.WriteLine("Penguin swims");
+    }
 }
 
-public static class LspDemo
+class Program
 {
-	public static void Run()
-	{
-		Bird b1 = new Sparrow();
-		b1.Eat();
-		((IFly)b1).Fly();
+    static void Main()
+    {
+        Bird s = new Sparrow();
+        s.Eat();
+        ((IFly)s).Fly();  // Only birds that fly implement IFly
 
-		Bird b2 = new Penguin();
-		b2.Eat();
-		((Penguin)b2).Swim();
-	}
+        Bird p = new Penguin();
+        p.Eat();
+        ((Penguin)p).Swim(); // Only penguin swims
+    }
 }
-

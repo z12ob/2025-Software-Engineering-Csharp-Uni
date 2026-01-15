@@ -1,56 +1,52 @@
-#nullable disable
-
-using System;
-
-namespace Session7_SOLID_DIP;
-
-// DIP: high-level code depends on abstraction (interface), not concrete classes.
-
-public interface IMessageSender
+// High-level code depends on abstraction, not concrete classes
+interface IMessageSender
 {
-	void Send(string message);
+    void Send(string message);
 }
 
-public class EmailSender : IMessageSender
+// Concrete implementation 1
+class EmailSender : IMessageSender
 {
-	public void Send(string message)
-	{
-		Console.WriteLine("Email: " + message);
-	}
+    public void Send(string message)
+    {
+        Console.WriteLine("Email: " + message);
+    }
 }
 
-public class SmsSender : IMessageSender
+// Concrete implementation 2
+class SmsSender : IMessageSender
 {
-	public void Send(string message)
-	{
-		Console.WriteLine("SMS: " + message);
-	}
+    public void Send(string message)
+    {
+        Console.WriteLine("SMS: " + message);
+    }
 }
 
-public class Notification
+// High-level module depends on interface
+class Notification
 {
-	private IMessageSender sender;
+    private IMessageSender sender;
 
-	public Notification(IMessageSender sender)
-	{
-		this.sender = sender;
-	}
+    // Dependency injected via constructor
+    public Notification(IMessageSender sender)
+    {
+        this.sender = sender;
+    }
 
-	public void Notify(string message)
-	{
-		sender.Send(message);
-	}
+    public void Notify(string message)
+    {
+        sender.Send(message);
+    }
 }
 
-public static class DipDemo
+class Program
 {
-	public static void Run()
-	{
-		Notification n1 = new Notification(new EmailSender());
-		n1.Notify("Hello from DIP");
+    static void Main()
+    {
+        Notification n1 = new Notification(new EmailSender());
+        n1.Notify("Hello DIP");
 
-		Notification n2 = new Notification(new SmsSender());
-		n2.Notify("Same Notification, different sender");
-	}
+        Notification n2 = new Notification(new SmsSender());
+        n2.Notify("Same Notification, different sender");
+    }
 }
-
