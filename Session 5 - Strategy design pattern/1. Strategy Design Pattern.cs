@@ -1,3 +1,6 @@
+// Strategy Design Pattern is a behavioral design pattern that enables selecting an algorithm's behavior at runtime.
+// It defines a family of algorithms, encapsulates each one, and makes them interchangeable within that family.
+
 interface IStrategy
 {
     // Common algorithm interface.
