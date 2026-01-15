@@ -1,3 +1,7 @@
+// Facade Design Pattern is a structural design pattern that provides a simplified interface
+// to a complex subsystem, making it easier for clients to interact with the system.
+// It hides the complexities of the subsystem and provides a higher-level interface.
+
 class Subsystem1
 {
     public void Method1()
