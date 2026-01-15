@@ -1,76 +1,55 @@
-#nullable disable
-
-using System;
-using System.Collections.Generic;
-
-namespace Session10_Mediator;
-
-// MEDIATOR (simple lecture style)
-// Users talk through ChatRoom, not directly.
-
-public class ChatRoom
+// Mediator handles communication
+class ChatRoom
 {
-	private List<User> users = new List<User>();
+    private List<User> users = new List<User>();
 
-	public void Register(User user)
-	{
-		users.Add(user);
-		user.SetRoom(this);
-	}
+    public void Register(User u)
+    {
+        users.Add(u);
+        u.SetRoom(this);
+    }
 
-	public void Send(string from, string to, string message)
-	{
-		for (int i = 0; i < users.Count; i++)
-		{
-			if (users[i].Name == to)
-			{
-				users[i].Receive(from, message);
-				return;
-			}
-		}
-		Console.WriteLine("User not found: " + to);
-	}
+    public void Send(string from, string to, string msg)
+    {
+        foreach (var u in users)
+        {
+            if (u.Name == to)
+            {
+                u.Receive(from, msg);
+                return;
+            }
+        }
+        Console.WriteLine("User not found: " + to);
+    }
 }
 
-public class User
+// Colleague communicates through mediator
+class User
 {
-	private ChatRoom room;
-	public string Name;
+    private ChatRoom room;
+    public string Name;
 
-	public User(string name)
-	{
-		Name = name;
-	}
+    public User(string name) { Name = name; }
 
-	public void SetRoom(ChatRoom room)
-	{
-		this.room = room;
-	}
+    public void SetRoom(ChatRoom r) { room = r; }
 
-	public void Send(string to, string message)
-	{
-		room.Send(Name, to, message);
-	}
+    public void Send(string to, string msg) => room.Send(Name, to, msg);
 
-	public void Receive(string from, string message)
-	{
-		Console.WriteLine(Name + " received from " + from + ": " + message);
-	}
+    public void Receive(string from, string msg) => Console.WriteLine($"{Name} received from {from}: {msg}");
 }
 
-public static class MediatorDemo
+class Program
 {
-	public static void Run()
-	{
-		ChatRoom room = new ChatRoom();
-		User a = new User("Ana");
-		User b = new User("Gio");
+    static void Main()
+    {
+        ChatRoom room = new ChatRoom();
+        User a = new User("Ana");
+        User b = new User("Gio");
 
-		room.Register(a);
-		room.Register(b);
+        room.Register(a);
+        room.Register(b);
 
-		a.Send("Gio", "Hello");
-		b.Send("Ana", "Hi");
-	}
+        a.Send("Gio", "Hello");
+        b.Send("Ana", "Hi");
+    }
 }
-
