@@ -1,63 +1,62 @@
-#nullable disable
-
-using System;
-
-namespace Session3_State;
-
-// STATE pattern (simple lecture style)
-// TV changes behavior based on its current state (ON/OFF).
-
-public interface ITVState
+interface ITVState
 {
-	void PressPower(TV tv);
+    // State handles behavior.
+    void PressPower(TV tv);
 }
 
-public class TV
+class TV
 {
-	private ITVState state;
+    // Current state object.
+    private ITVState state;
 
-	public TV()
-	{
-		state = new TvOffState();
-	}
+    public TV()
+    {
+        // Initial state.
+        state = new TvOffState();
+    }
 
-	public void SetState(ITVState newState)
-	{
-		state = newState;
-	}
+    // State transition happens here.
+    public void SetState(ITVState newState)
+    {
+        state = newState;
+    }
 
-	public void PressPower()
-	{
-		state.PressPower(this);
-	}
+    // Context delegates behavior to state.
+    public void PressPower()
+    {
+        state.PressPower(this);
+    }
 }
 
-public class TvOnState : ITVState
+// Concrete state.
+class TvOnState : ITVState
 {
-	public void PressPower(TV tv)
-	{
-		Console.WriteLine("TV is ON -> turning OFF");
-		tv.SetState(new TvOffState());
-	}
+    public void PressPower(TV tv)
+    {
+        Console.WriteLine("ON -> OFF");
+        // Change state at runtime.
+        tv.SetState(new TvOffState());
+    }
 }
 
-public class TvOffState : ITVState
+// Concrete state.
+class TvOffState : ITVState
 {
-	public void PressPower(TV tv)
-	{
-		Console.WriteLine("TV is OFF -> turning ON");
-		tv.SetState(new TvOnState());
-	}
+    public void PressPower(TV tv)
+    {
+        Console.WriteLine("OFF -> ON");
+        tv.SetState(new TvOnState());
+    }
 }
 
-public static class StateDemo
+class Program
 {
-	public static void Run()
-	{
-		TV tv = new TV();
-		tv.PressPower();
-		tv.PressPower();
-		tv.PressPower();
-	}
-}
+    static void Main()
+    {
+        TV tv = new TV();
 
+        // Same call. Different behavior.
+        tv.PressPower();
+        tv.PressPower();
+    }
+}
