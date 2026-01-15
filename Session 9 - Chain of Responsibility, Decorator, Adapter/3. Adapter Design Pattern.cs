@@ -1,46 +1,28 @@
-#nullable disable
-
-using System;
-
-namespace Session9_Adapter;
-
-// ADAPTER (simple lecture style)
-// Convert one interface to another.
-
-public interface ITarget
+// Target interface expected by client
+interface ITarget
 {
-	void Request();
+    void Request();
 }
 
-public class Adaptee
+// Existing class with incompatible interface
+class Adaptee
 {
-	public void SpecificRequest()
-	{
-		Console.WriteLine("Adaptee: SpecificRequest");
-	}
+    public void SpecificRequest() => Console.WriteLine("Adaptee: SpecificRequest");
 }
 
-public class Adapter : ITarget
+// Adapter converts Adaptee to ITarget
+class Adapter : ITarget
 {
-	private Adaptee adaptee;
-
-	public Adapter(Adaptee adaptee)
-	{
-		this.adaptee = adaptee;
-	}
-
-	public void Request()
-	{
-		adaptee.SpecificRequest();
-	}
+    private Adaptee adaptee;
+    public Adapter(Adaptee a) { adaptee = a; }
+    public void Request() => adaptee.SpecificRequest();
 }
 
-public static class AdapterDemo
+class Program
 {
-	public static void Run()
-	{
-		ITarget target = new Adapter(new Adaptee());
-		target.Request();
-	}
+    static void Main()
+    {
+        ITarget target = new Adapter(new Adaptee());
+        target.Request(); // Client works with target interface
+    }
 }
-

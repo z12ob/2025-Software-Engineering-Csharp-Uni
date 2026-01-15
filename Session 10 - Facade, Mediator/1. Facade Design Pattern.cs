@@ -1,64 +1,43 @@
-#nullable disable
-
-using System;
-
-namespace Session10_Facade;
-
-// FACADE (simple lecture style)
-// One method does many subsystem steps.
-
-public class CPU
+// Subsystems
+class CPU
 {
-	public void Freeze() { Console.WriteLine("CPU: Freeze"); }
-	public void Jump(long position) { Console.WriteLine("CPU: Jump " + position); }
-	public void Execute() { Console.WriteLine("CPU: Execute"); }
+    public void Freeze() => Console.WriteLine("CPU: Freeze");
+    public void Jump(long pos) => Console.WriteLine("CPU: Jump " + pos);
+    public void Execute() => Console.WriteLine("CPU: Execute");
 }
 
-public class Memory
+class Memory
 {
-	public void Load(long position, string data)
-	{
-		Console.WriteLine("Memory: Load " + data + " at " + position);
-	}
+    public void Load(long pos, string data) => Console.WriteLine("Memory: Load " + data + " at " + pos);
 }
 
-public class HardDrive
+class HardDrive
 {
-	public string Read(long lba, int size)
-	{
-		return "DATA";
-	}
+    public string Read(long lba, int size) => "DATA";
 }
 
-public class ComputerFacade
+// Facade provides simple interface
+class ComputerFacade
 {
-	private CPU cpu;
-	private Memory memory;
-	private HardDrive hardDrive;
+    private CPU cpu = new CPU();
+    private Memory memory = new Memory();
+    private HardDrive hd = new HardDrive();
 
-	public ComputerFacade()
-	{
-		cpu = new CPU();
-		memory = new Memory();
-		hardDrive = new HardDrive();
-	}
-
-	public void Start()
-	{
-		cpu.Freeze();
-		string data = hardDrive.Read(0, 1024);
-		memory.Load(0, data);
-		cpu.Jump(0);
-		cpu.Execute();
-	}
+    public void Start()
+    {
+        cpu.Freeze();
+        string data = hd.Read(0, 1024);
+        memory.Load(0, data);
+        cpu.Jump(0);
+        cpu.Execute();
+    }
 }
 
-public static class FacadeDemo
+class Program
 {
-	public static void Run()
-	{
-		ComputerFacade pc = new ComputerFacade();
-		pc.Start();
-	}
+    static void Main()
+    {
+        ComputerFacade pc = new ComputerFacade();
+        pc.Start(); // Client calls one method instead of multiple subsystems
+    }
 }
-
