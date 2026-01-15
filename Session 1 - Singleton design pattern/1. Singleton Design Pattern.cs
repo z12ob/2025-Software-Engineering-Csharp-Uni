@@ -1,3 +1,6 @@
+// Singleton Design Pattern is a creational design pattern that ensures a class has only one instance
+// and provides a global point of access to that instance.
+
 class Singleton
 {
     // Holds the single instance.
