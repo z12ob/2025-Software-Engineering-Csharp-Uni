@@ -1,49 +1,41 @@
-#nullable disable
-
-using System;
-
-namespace Session6_SOLID_SRP;
-
-// SRP: one class = one responsibility.
-
-public class Report
+class Report
 {
-	public string Title;
-	public string Text;
+    // Data only. No actions.
+    public string Title;
+    public string Text;
 
-	public Report(string title, string text)
-	{
-		Title = title;
-		Text = text;
-	}
+    public Report(string title, string text)
+    {
+        Title = title;
+        Text = text;
+    }
 }
 
-public class ReportPrinter
+class ReportPrinter
 {
-	public void Print(Report report)
-	{
-		Console.WriteLine("--- PRINT ---");
-		Console.WriteLine(report.Title);
-		Console.WriteLine(report.Text);
-	}
+    // One responsibility. Printing.
+    public void Print(Report report)
+    {
+        Console.WriteLine(report.Title);
+        Console.WriteLine(report.Text);
+    }
 }
 
-public class ReportSaver
+class ReportSaver
 {
-	public void Save(Report report)
-	{
-		Console.WriteLine("--- SAVE ---");
-		Console.WriteLine("Saved: " + report.Title);
-	}
+    // One responsibility. Saving.
+    public void Save(Report report)
+    {
+        Console.WriteLine("Saved " + report.Title);
+    }
 }
 
-public static class SrpDemo
+class Program
 {
-	public static void Run()
-	{
-		Report report = new Report("SRP Example", "Printing and Saving are separate.");
-		new ReportPrinter().Print(report);
-		new ReportSaver().Save(report);
-	}
+    static void Main()
+    {
+        Report r = new Report("SRP", "One reason to change");
+        new ReportPrinter().Print(r);
+        new ReportSaver().Save(r);
+    }
 }
-

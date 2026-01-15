@@ -1,62 +1,60 @@
-#nullable disable
-
-using System;
-
-namespace Session5_Strategy;
-
-// STRATEGY pattern (simple lecture style)
-// Choose different algorithms at runtime.
-
-public interface IStrategy
+interface IStrategy
 {
-	int DoOperation(int a, int b);
+    // Common algorithm interface.
+    int DoOperation(int a, int b);
 }
 
-public class AddStrategy : IStrategy
+// One concrete algorithm.
+class AddStrategy : IStrategy
 {
-	public int DoOperation(int a, int b)
-	{
-		return a + b;
-	}
+    public int DoOperation(int a, int b)
+    {
+        return a + b;
+    }
 }
 
-public class MultiplyStrategy : IStrategy
+// Another concrete algorithm.
+class MultiplyStrategy : IStrategy
 {
-	public int DoOperation(int a, int b)
-	{
-		return a * b;
-	}
+    public int DoOperation(int a, int b)
+    {
+        return a * b;
+    }
 }
 
-public class Context
+class Context
 {
-	private IStrategy strategy;
+    // Holds current strategy.
+    private IStrategy strategy;
 
-	public Context(IStrategy strategy)
-	{
-		this.strategy = strategy;
-	}
+    // Strategy is injected.
+    public Context(IStrategy strategy)
+    {
+        this.strategy = strategy;
+    }
 
-	public void SetStrategy(IStrategy strategy)
-	{
-		this.strategy = strategy;
-	}
+    // Strategy is changeable at runtime.
+    public void SetStrategy(IStrategy strategy)
+    {
+        this.strategy = strategy;
+    }
 
-	public int Execute(int a, int b)
-	{
-		return strategy.DoOperation(a, b);
-	}
+    // Context delegates work to strategy.
+    public int Execute(int a, int b)
+    {
+        return strategy.DoOperation(a, b);
+    }
 }
 
-public static class StrategyDemo
+class Program
 {
-	public static void Run()
-	{
-		Context context = new Context(new AddStrategy());
-		Console.WriteLine("10 + 5 = " + context.Execute(10, 5));
+    static void Main()
+    {
+        Context c = new Context(new AddStrategy());
+        Console.WriteLine(c.Execute(10, 5));
 
-		context.SetStrategy(new MultiplyStrategy());
-		Console.WriteLine("10 * 5 = " + context.Execute(10, 5));
-	}
+        // Same context. Different behavior.
+        c.SetStrategy(new MultiplyStrategy());
+        Console.WriteLine(c.Execute(10, 5));
+    }
 }
-

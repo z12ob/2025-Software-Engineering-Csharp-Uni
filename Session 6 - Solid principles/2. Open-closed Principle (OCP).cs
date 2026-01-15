@@ -1,90 +1,66 @@
-#nullable disable
-
-using System;
-using System.Collections.Generic;
-
-namespace Session6_SOLID_OCP;
-
-// OCP: add new classes (extension) without changing old code.
-
-public interface IShape
+interface IShape
 {
-	double Area();
+    // Behavior is abstract.
+    double Area();
 }
 
-public class Circle : IShape
+// Existing class.
+class Rectangle : IShape
 {
-	public double Radius;
+    public double W, H;
 
-	public Circle(double radius)
-	{
-		Radius = radius;
-	}
+    public Rectangle(double w, double h)
+    {
+        W = w;
+        H = h;
+    }
 
-	public double Area()
-	{
-		return Math.PI * Radius * Radius;
-	}
+    public double Area()
+    {
+        return W * H;
+    }
 }
 
-public class Rectangle : IShape
+// New class added later.
+// No existing code is touched.
+class Circle : IShape
 {
-	public double Width;
-	public double Height;
+    public double R;
 
-	public Rectangle(double width, double height)
-	{
-		Width = width;
-		Height = height;
-	}
+    public Circle(double r)
+    {
+        R = r;
+    }
 
-	public double Area()
-	{
-		return Width * Height;
-	}
+    public double Area()
+    {
+        return Math.PI * R * R;
+    }
 }
 
-public class Triangle : IShape
+class AreaCalculator
 {
-	public double BaseLength;
-	public double Height;
+    // Closed for modification.
+    // Works for any new shape.
+    public double TotalArea(List<IShape> shapes)
+    {
+        double sum = 0;
+        foreach (IShape s in shapes)
+            sum += s.Area();
 
-	public Triangle(double baseLength, double height)
-	{
-		BaseLength = baseLength;
-		Height = height;
-	}
-
-	public double Area()
-	{
-		return (BaseLength * Height) / 2;
-	}
+        return sum;
+    }
 }
 
-public class AreaCalculator
+class Program
 {
-	public double TotalArea(List<IShape> shapes)
-	{
-		double sum = 0;
-		for (int i = 0; i < shapes.Count; i++)
-		{
-			sum += shapes[i].Area();
-		}
-		return sum;
-	}
+    static void Main()
+    {
+        List<IShape> shapes = new List<IShape>();
+        shapes.Add(new Rectangle(3, 4));
+        shapes.Add(new Circle(2));
+
+        AreaCalculator c = new AreaCalculator();
+        Console.WriteLine(c.TotalArea(shapes));
+    }
 }
-
-public static class OcpDemo
-{
-	public static void Run()
-	{
-		List<IShape> shapes = new List<IShape>();
-		shapes.Add(new Circle(2));
-		shapes.Add(new Rectangle(3, 4));
-		shapes.Add(new Triangle(10, 2));
-
-		AreaCalculator calculator = new AreaCalculator();
-		Console.WriteLine("Total area: " + calculator.TotalArea(shapes));
-	}
-}
-
