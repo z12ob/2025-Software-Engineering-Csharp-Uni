@@ -1,44 +1,36 @@
-using System;
-
-namespace Session1_Singleton;
-
-// Singleton Design Pattern
-// - Only one object is created.
-// - Private constructor + public GetInstance().
-// Note: simplest version for studying (not thread-safe).
-
-public class Singleton
+class Singleton
 {
-	private static Singleton instance;
+    // Holds the single instance.
+    private static Singleton instance;
 
-	private Singleton() { }
+    // Private constructor blocks new from outside.
+    private Singleton() { }
 
-	public static Singleton GetInstance()
-	{
-		if (instance == null)
-		{
-			instance = new Singleton();
-		}
-		return instance;
-	}
+    // Global access point.
+    public static Singleton GetInstance()
+    {
+        // Create only once.
+        if (instance == null)
+            instance = new Singleton();
 
-	public void DoSomething()
-	{
-		Console.WriteLine("Singleton works!");
-	}
+        // Always return the same object.
+        return instance;
+    }
+
+    public void DoWork()
+    {
+        Console.WriteLine("Works");
+    }
 }
 
-public static class SingletonDemo
+class Program
 {
-	// Usage:
-	// Singleton obj = Singleton.GetInstance();
-	public static void Run()
-	{
-		Singleton s1 = Singleton.GetInstance();
-		Singleton s2 = Singleton.GetInstance();
+    static void Main()
+    {
+        // Both variables point to the same object.
+        Singleton a = Singleton.GetInstance();
+        Singleton b = Singleton.GetInstance();
 
-		Console.WriteLine("Same object? " + Object.ReferenceEquals(s1, s2));
-		s1.DoSomething();
-	}
+        Console.WriteLine(object.ReferenceEquals(a, b));
+    }
 }
-

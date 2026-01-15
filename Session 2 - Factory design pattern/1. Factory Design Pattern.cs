@@ -1,64 +1,49 @@
-using System;
-
-namespace Session2_Factory;
-
-// Factory Design Pattern
-// - Factory returns objects using an interface.
-// - Client does not know the concrete class.
-
-public interface IProduct
+interface IProduct
 {
-	void GetData();
+    // Common operation for all products.
+    void GetData();
 }
 
-public class Apple : IProduct
+// Concrete product.
+class Apple : IProduct
 {
-	public void GetData()
-	{
-		Console.WriteLine("I am Apple");
-	}
+    public void GetData()
+    {
+        Console.WriteLine("Apple");
+    }
 }
 
-public class Micro : IProduct
+// Another concrete product.
+class Google : IProduct
 {
-	public void GetData()
-	{
-		Console.WriteLine("I am Microsoft");
-	}
+    public void GetData()
+    {
+        Console.WriteLine("Google");
+    }
 }
 
-public class Google : IProduct
+class ProductFactory
 {
-	public void GetData()
-	{
-		Console.WriteLine("I am Google");
-	}
+    // Factory decides which object to create.
+    public IProduct Create(int type)
+    {
+        // Creation logic is hidden here.
+        if (type == 1)
+            return new Apple();
+        else
+            return new Google();
+    }
 }
 
-public class ProductFactory
+class Program
 {
-	public IProduct GetProduct(int i)
-	{
-		if (i == 1)
-			return new Apple();
-		else if (i == 2)
-			return new Micro();
-		else
-			return new Google();
-	}
+    static void Main()
+    {
+        // Client talks to factory.
+        ProductFactory factory = new ProductFactory();
+
+        // Client depends on interface only.
+        IProduct p = factory.Create(1);
+        p.GetData();
+    }
 }
-
-public static class FactoryDemo
-{
-	public static void Run()
-	{
-		ProductFactory factory = new ProductFactory();
-
-		IProduct p1 = factory.GetProduct(1);
-		p1.GetData();
-
-		IProduct p2 = factory.GetProduct(2);
-		p2.GetData();
-	}
-}
-
