@@ -1,61 +1,51 @@
-#nullable disable
-
-using System;
-
-namespace Session9_Decorator;
-
-// DECORATOR (simple lecture style)
-// Add extra behavior to an object by wrapping it.
-
-public interface ICoffee
+// Base component
+interface ICoffee
 {
-	string GetDescription();
-	int GetCost();
+    string GetDescription();
+    int GetCost();
 }
 
-public class SimpleCoffee : ICoffee
+// Concrete component
+class SimpleCoffee : ICoffee
 {
-	public string GetDescription() { return "Coffee"; }
-	public int GetCost() { return 5; }
+    public string GetDescription() => "Coffee";
+    public int GetCost() => 5;
 }
 
-public abstract class CoffeeDecorator : ICoffee
+// Base decorator
+abstract class CoffeeDecorator : ICoffee
 {
-	protected ICoffee coffee;
-
-	protected CoffeeDecorator(ICoffee coffee)
-	{
-		this.coffee = coffee;
-	}
-
-	public virtual string GetDescription() { return coffee.GetDescription(); }
-	public virtual int GetCost() { return coffee.GetCost(); }
+    protected ICoffee coffee;
+    protected CoffeeDecorator(ICoffee coffee) { this.coffee = coffee; }
+    public virtual string GetDescription() => coffee.GetDescription();
+    public virtual int GetCost() => coffee.GetCost();
 }
 
-public class MilkDecorator : CoffeeDecorator
+// Add milk behavior
+class MilkDecorator : CoffeeDecorator
 {
-	public MilkDecorator(ICoffee coffee) : base(coffee) { }
-	public override string GetDescription() { return coffee.GetDescription() + "+Milk"; }
-	public override int GetCost() { return coffee.GetCost() + 2; }
+    public MilkDecorator(ICoffee coffee) : base(coffee) { }
+    public override string GetDescription() => coffee.GetDescription() + "+Milk";
+    public override int GetCost() => coffee.GetCost() + 2;
 }
 
-public class SugarDecorator : CoffeeDecorator
+// Add sugar behavior
+class SugarDecorator : CoffeeDecorator
 {
-	public SugarDecorator(ICoffee coffee) : base(coffee) { }
-	public override string GetDescription() { return coffee.GetDescription() + "+Sugar"; }
-	public override int GetCost() { return coffee.GetCost() + 1; }
+    public SugarDecorator(ICoffee coffee) : base(coffee) { }
+    public override string GetDescription() => coffee.GetDescription() + "+Sugar";
+    public override int GetCost() => coffee.GetCost() + 1;
 }
 
-public static class DecoratorDemo
+class Program
 {
-	public static void Run()
-	{
-		ICoffee coffee = new SimpleCoffee();
-		coffee = new MilkDecorator(coffee);
-		coffee = new SugarDecorator(coffee);
+    static void Main()
+    {
+        ICoffee coffee = new SimpleCoffee();
+        coffee = new MilkDecorator(coffee);
+        coffee = new SugarDecorator(coffee);
 
-		Console.WriteLine(coffee.GetDescription());
-		Console.WriteLine("Cost: " + coffee.GetCost());
-	}
+        Console.WriteLine(coffee.GetDescription()); // Coffee+Milk+Sugar
+        Console.WriteLine(coffee.GetCost());        // 8
+    }
 }
-
