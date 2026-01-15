@@ -1,3 +1,6 @@
+// Prototype Design Pattern is a creational design pattern that allows cloning objects,
+// even complex ones, without coupling to their specific classes.
+
 // Cloneable object
 class Address
 {
