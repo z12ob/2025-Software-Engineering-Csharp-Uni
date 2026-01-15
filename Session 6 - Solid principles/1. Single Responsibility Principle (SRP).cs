@@ -1,3 +1,6 @@
+// Single Responsibility Principle (SRP) states that a class should have only one reason to change,
+// meaning it should have only one job or responsibility.
+
 class Report
 {
     // Data only. No actions.
