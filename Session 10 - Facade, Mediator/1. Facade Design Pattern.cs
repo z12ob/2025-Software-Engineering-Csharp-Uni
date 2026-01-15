@@ -1,3 +1,6 @@
+// Facade Design Pattern is a structural design pattern that provides a simplified interface
+// to a complex subsystem, making it easier for clients to interact with the system.
+
 // Subsystems
 class CPU
 {
