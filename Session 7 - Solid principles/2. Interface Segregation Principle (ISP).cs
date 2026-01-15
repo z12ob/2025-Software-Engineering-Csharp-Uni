@@ -1,3 +1,6 @@
+// Interface Segregation Principle (ISP) states that no client should be forced to depend on methods it does not use.
+// Many specific interfaces are better than one general interface.
+
 // Split interfaces to avoid forcing unnecessary methods
 interface IPrinter
 {

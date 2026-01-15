@@ -1,3 +1,6 @@
+// Dependency Inversion Principle (DIP) states that high-level modules should not depend on low-level modules.
+// Both should depend on abstractions. Abstractions should not depend on details.
+
 // High-level code depends on abstraction, not concrete classes
 interface IMessageSender
 {

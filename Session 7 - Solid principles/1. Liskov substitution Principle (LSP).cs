@@ -1,3 +1,6 @@
+// Liskov Substitution Principle (LSP) states that objects of a superclass
+// should be replaceable with objects of its subclasses without affecting the correctness of the program.
+
 // Base class has only safe behaviors.
 abstract class Bird
 {
