@@ -1,3 +1,6 @@
+// Decorator Design Pattern is a structural design pattern that allows behavior to be added to individual objects,
+// dynamically, without affecting the behavior of other objects from the same class.
+
 // Base component
 interface ICoffee
 {

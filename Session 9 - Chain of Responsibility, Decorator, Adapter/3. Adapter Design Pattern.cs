@@ -1,3 +1,6 @@
+// Adapter Design Pattern is a structural design pattern that allows objects with incompatible interfaces
+// to work together. It acts as a bridge between two incompatible interfaces.
+
 // Target interface expected by client
 interface ITarget
 {
