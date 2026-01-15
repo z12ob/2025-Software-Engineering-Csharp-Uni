@@ -1,73 +1,45 @@
-#nullable disable
+// Abstract products
+interface IButton { void Draw(); }
+interface ICheckbox { void Draw(); }
 
-using System;
-
-namespace Session8_AbstractFactory;
-
-// ABSTRACT FACTORY pattern (simple lecture style)
-// Create families of related objects.
-
-public interface IButton
+// Abstract factory
+interface IGuiFactory
 {
-	void Draw();
+    IButton CreateButton();
+    ICheckbox CreateCheckbox();
 }
 
-public interface ICheckbox
+// Concrete Windows products
+class WinButton : IButton { public void Draw() => Console.WriteLine("Windows Button"); }
+class WinCheckbox : ICheckbox { public void Draw() => Console.WriteLine("Windows Checkbox"); }
+
+// Concrete Mac products
+class MacButton : IButton { public void Draw() => Console.WriteLine("Mac Button"); }
+class MacCheckbox : ICheckbox { public void Draw() => Console.WriteLine("Mac Checkbox"); }
+
+// Concrete factories
+class WindowsFactory : IGuiFactory
 {
-	void Draw();
+    public IButton CreateButton() => new WinButton();
+    public ICheckbox CreateCheckbox() => new WinCheckbox();
 }
 
-public interface IGuiFactory
+class MacFactory : IGuiFactory
 {
-	IButton CreateButton();
-	ICheckbox CreateCheckbox();
+    public IButton CreateButton() => new MacButton();
+    public ICheckbox CreateCheckbox() => new MacCheckbox();
 }
 
-public class WinButton : IButton
+class Program
 {
-	public void Draw() { Console.WriteLine("Windows Button"); }
+    static void Main()
+    {
+        IGuiFactory f = new WindowsFactory();
+        f.CreateButton().Draw();
+        f.CreateCheckbox().Draw();
+
+        f = new MacFactory();
+        f.CreateButton().Draw();
+        f.CreateCheckbox().Draw();
+    }
 }
-
-public class WinCheckbox : ICheckbox
-{
-	public void Draw() { Console.WriteLine("Windows Checkbox"); }
-}
-
-public class WindowsFactory : IGuiFactory
-{
-	public IButton CreateButton() { return new WinButton(); }
-	public ICheckbox CreateCheckbox() { return new WinCheckbox(); }
-}
-
-public class MacButton : IButton
-{
-	public void Draw() { Console.WriteLine("Mac Button"); }
-}
-
-public class MacCheckbox : ICheckbox
-{
-	public void Draw() { Console.WriteLine("Mac Checkbox"); }
-}
-
-public class MacFactory : IGuiFactory
-{
-	public IButton CreateButton() { return new MacButton(); }
-	public ICheckbox CreateCheckbox() { return new MacCheckbox(); }
-}
-
-public static class AbstractFactoryDemo
-{
-	public static void Run()
-	{
-		IGuiFactory factory = new WindowsFactory();
-		factory.CreateButton().Draw();
-		factory.CreateCheckbox().Draw();
-
-		Console.WriteLine();
-
-		factory = new MacFactory();
-		factory.CreateButton().Draw();
-		factory.CreateCheckbox().Draw();
-	}
-}
-

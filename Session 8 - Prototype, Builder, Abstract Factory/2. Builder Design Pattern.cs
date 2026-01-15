@@ -1,69 +1,39 @@
-#nullable disable
-
-using System;
-
-namespace Session8_Builder;
-
-// BUILDER pattern (simple lecture style)
-// Build an object step-by-step.
-
-public class House
+// Product
+class House
 {
-	public string Walls;
-	public string Roof;
-	public string Door;
+    public string Walls;
+    public string Roof;
+    public string Door;
 
-	public void Show()
-	{
-		Console.WriteLine("House: " + Walls + ", " + Roof + ", " + Door);
-	}
+    public void Show()
+    {
+        Console.WriteLine(Walls + ", " + Roof + ", " + Door);
+    }
 }
 
-public class HouseBuilder
+// Builder builds step by step
+class HouseBuilder
 {
-	private House house;
+    private House house = new House();
 
-	public HouseBuilder()
-	{
-		house = new House();
-	}
+    public HouseBuilder BuildWalls(string w) { house.Walls = w; return this; }
+    public HouseBuilder BuildRoof(string r) { house.Roof = r; return this; }
+    public HouseBuilder BuildDoor(string d) { house.Door = d; return this; }
 
-	public HouseBuilder BuildWalls(string walls)
-	{
-		house.Walls = walls;
-		return this;
-	}
-
-	public HouseBuilder BuildRoof(string roof)
-	{
-		house.Roof = roof;
-		return this;
-	}
-
-	public HouseBuilder BuildDoor(string door)
-	{
-		house.Door = door;
-		return this;
-	}
-
-	public House GetHouse()
-	{
-		return house;
-	}
+    // Returns final product
+    public House GetHouse() { return house; }
 }
 
-public static class BuilderDemo
+class Program
 {
-	public static void Run()
-	{
-		HouseBuilder builder = new HouseBuilder();
-		House house = builder
-			.BuildWalls("Brick walls")
-			.BuildRoof("Red roof")
-			.BuildDoor("Wood door")
-			.GetHouse();
+    static void Main()
+    {
+        House h = new HouseBuilder()
+            .BuildWalls("Brick")
+            .BuildRoof("Red")
+            .BuildDoor("Wood")
+            .GetHouse();
 
-		house.Show();
-	}
+        h.Show();
+    }
 }
-
